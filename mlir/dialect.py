@@ -181,7 +181,6 @@ def add_dialect_rules(dialect: Dialect, elements: List[Type[DialectElement]],
                 return lambda value: elem(match=i, **dict(zip(sfield_names, value)))
 
             rule_dict[rule_name] = create_rule(elem, i)
-
     return parser_src
 
 

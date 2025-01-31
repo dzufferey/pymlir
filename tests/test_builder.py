@@ -44,9 +44,9 @@ func.func @saxpy(%a : f64, %x : memref<?xf64>, %y : memref<?xf64>) {
 
 affine.for %i = 0 to %n {
   %xi = affine.load %x[%i+1] : memref<?xf64>
-  %axi =  mulf %a, %xi : f64
+  %axi =  arith.mulf %a, %xi : f64
   %yi = affine.load %y[%i] : memref<?xf64>
-  %axpyi = addf %yi, %axi : f64
+  %axpyi = arith.addf %yi, %axi : f64
   affine.store %axpyi, %y[%i] : memref<?xf64>
 }
 return

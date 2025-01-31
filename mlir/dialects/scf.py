@@ -13,7 +13,7 @@ class SCFConditionOp(DialectOp):
     condition: mast.SsaId
     args: List[mast.SsaId]
     out_types: List[mast.Type]
-    _syntax_ = ['scf.condition ( {condition.ssa_id} ) {args.ssa_id_list} : {out_types.type_list_no_parens}']
+    _syntax_ = ['scf.condition ( {condition.SSA_ID} ) {args.ssa_id_list} : {out_types.type_list_no_parens}']
 
 
 @dataclass
@@ -26,12 +26,12 @@ class SCFForOp(DialectOp):
     iter_args: Optional[List[Tuple[mast.SsaId, mast.SsaId]]] = None
     iter_args_types: Optional[List[mast.Type]] = None
     out_type: Optional[mast.Type] = None
-    _syntax_ = ['scf.for {index.ssa_id} = {begin.ssa_id} to {end.ssa_id} step {step.ssa_id} {body.region}',
-                'scf.for {index.ssa_id} = {begin.ssa_id} to {end.ssa_id} step {step.ssa_id} : {out_type.type} {body.region}',
-                'scf.for {index.ssa_id} = {begin.ssa_id} to {end.ssa_id} step {step.ssa_id} iter_args ( {iter_args.argument_assignment_list_no_parens} ) -> {iter_args_types.type_list_no_parens} {body.region}',
-                'scf.for {index.ssa_id} = {begin.ssa_id} to {end.ssa_id} step {step.ssa_id} iter_args ( {iter_args.argument_assignment_list_no_parens} ) -> {iter_args_types.type_list_no_parens} : {out_type.type} {body.region}',
-                'scf.for {index.ssa_id} = {begin.ssa_id} to {end.ssa_id} step {step.ssa_id} iter_args ( {iter_args.argument_assignment_list_no_parens} ) -> ( {iter_args_types.type_list_no_parens} ) {body.region}',
-                'scf.for {index.ssa_id} = {begin.ssa_id} to {end.ssa_id} step {step.ssa_id} iter_args ( {iter_args.argument_assignment_list_no_parens} ) -> ( {iter_args_types.type_list_no_parens} ) : {out_type.type} {body.region}']
+    _syntax_ = ['scf.for {index.SSA_ID} = {begin.SSA_ID} to {end.SSA_ID} step {step.SSA_ID} {body.region}',
+                'scf.for {index.SSA_ID} = {begin.SSA_ID} to {end.SSA_ID} step {step.SSA_ID} : {out_type.type} {body.region}',
+                'scf.for {index.SSA_ID} = {begin.SSA_ID} to {end.SSA_ID} step {step.SSA_ID} iter_args ( {iter_args.argument_assignment_list_no_parens} ) -> {iter_args_types.type_list_no_parens} {body.region}',
+                'scf.for {index.SSA_ID} = {begin.SSA_ID} to {end.SSA_ID} step {step.SSA_ID} iter_args ( {iter_args.argument_assignment_list_no_parens} ) -> {iter_args_types.type_list_no_parens} : {out_type.type} {body.region}',
+                'scf.for {index.SSA_ID} = {begin.SSA_ID} to {end.SSA_ID} step {step.SSA_ID} iter_args ( {iter_args.argument_assignment_list_no_parens} ) -> ( {iter_args_types.type_list_no_parens} ) {body.region}',
+                'scf.for {index.SSA_ID} = {begin.SSA_ID} to {end.SSA_ID} step {step.SSA_ID} iter_args ( {iter_args.argument_assignment_list_no_parens} ) -> ( {iter_args_types.type_list_no_parens} ) : {out_type.type} {body.region}']
 
 
 @dataclass
@@ -40,10 +40,10 @@ class SCFIfOp(DialectOp):
     body: mast.Region
     elsebody: Optional[mast.Region] = None
     out_types: Optional[List[mast.Type]] = None
-    _syntax_ = ['scf.if {cond.ssa_id} {body.region}',
-                'scf.if {cond.ssa_id} {body.region} else {elsebody.region}',
-                'scf.if {cond.ssa_id} -> ( {out_types.type_list_no_parens} ) {body.region}',
-                'scf.if {cond.ssa_id} -> ( {out_types.type_list_no_parens} ) {body.region} else {elsebody.region}']
+    _syntax_ = ['scf.if {cond.SSA_ID} {body.region}',
+                'scf.if {cond.SSA_ID} {body.region} else {elsebody.region}',
+                'scf.if {cond.SSA_ID} -> ( {out_types.type_list_no_parens} ) {body.region}',
+                'scf.if {cond.SSA_ID} -> ( {out_types.type_list_no_parens} ) {body.region} else {elsebody.region}']
 
 
 @dataclass

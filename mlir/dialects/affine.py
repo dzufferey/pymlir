@@ -28,10 +28,10 @@ class AffineForOp(DialectOp):
     attributes: Optional[mast.Attribute] = None
 
     _syntax_ = [
-        'affine.for {index.ssa_id} = {begin.symbol_or_const} to {end.symbol_or_const} {region.region}',
-        'affine.for {index.ssa_id} = {begin.symbol_or_const} to {end.symbol_or_const} step {step.symbol_or_const} {region.region}',
-        'affine.for {index.ssa_id} = {begin.symbol_or_const} to {end.symbol_or_const} {region.region} {attributes.attribute_dict}',
-        'affine.for {index.ssa_id} = {begin.symbol_or_const} to {end.symbol_or_const} step {step.symbol_or_const} {region.region} {attributes.attribute_dict}'
+        'affine.for {index.SSA_ID} = {begin.symbol_or_const} to {end.symbol_or_const} {region.region}',
+        'affine.for {index.SSA_ID} = {begin.symbol_or_const} to {end.symbol_or_const} step {step.symbol_or_const} {region.region}',
+        'affine.for {index.SSA_ID} = {begin.symbol_or_const} to {end.symbol_or_const} {region.region} {attributes.attribute_dict}',
+        'affine.for {index.SSA_ID} = {begin.symbol_or_const} to {end.symbol_or_const} step {step.symbol_or_const} {region.region} {attributes.attribute_dict}'
     ]
 
 
@@ -78,7 +78,7 @@ class AffinePrefetchOp(DialectOp):
     locality: int
     cachetype: mast.Identifier
     type: mast.Type
-    _syntax_ = 'affine.prefetch {arg.ssa_use} [ {index.multi_dim_affine_expr_no_parens} ] , {specifier.bare_id} , locality < {locality.integer_literal} > , {cachetype.bare_id} : {type.type}'
+    _syntax_ = 'affine.prefetch {arg.ssa_use} [ {index.multi_dim_affine_expr_no_parens} ] , {specifier.BARE_ID} , locality < {locality.INT} > , {cachetype.BARE_ID} : {type.type}'
 
 
 @dataclass

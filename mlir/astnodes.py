@@ -440,28 +440,13 @@ class UnitAttr(Attribute):
 @dataclass
 class AttributeEntry(Node):
     name: str
-    value: Optional[Attribute]
+    value: Optional[Attribute] = None
 
     def dump(self, indent: int = 0) -> str:
         if self.value:
             return '%s = %s' % (dump_or_value(self.name, indent),
                                 dump_or_value(self.value, indent))
         return dump_or_value(self.name, indent)
-
-
-@dataclass
-class DialectAttributeEntry(Node):
-    dialect: str
-    name: str
-    value: Optional[Attribute] = None
-
-    def dump(self, indent: int = 0) -> str:
-        if self.value:
-            return '%s.%s = %s' % (dump_or_value(self.dialect, indent),
-                                   dump_or_value(self.name, indent),
-                                   dump_or_value(self.value, indent))
-        return '%s.%s' % (dump_or_value(self.dialect, indent),
-                          dump_or_value(self.name, indent))
 
 
 @dataclass
@@ -535,27 +520,6 @@ class GenericOperation(Op):
                 dump_or_value(t, indent) for t in self.type)
         else:
             result += ' : ' + dump_or_value(self.type, indent)
-        return result
-
-
-@dataclass
-class CustomOperation(Op):
-    namespace: str
-    name: str
-    args: List[SsaId]
-    type: List[Type]
-
-    def dump(self, indent: int = 0) -> str:
-        result = '%s.%s' % (self.namespace, self.name)
-        if self.args:
-            result += ' %s' % ', '.join(
-                dump_or_value(arg, indent) for arg in self.args)
-        if isinstance(self.type, list):
-            result += ' : ' + ', '.join(
-                dump_or_value(t, indent) for t in self.type)
-        else:
-            result += ' : ' + dump_or_value(self.type, indent)
-
         return result
 
 

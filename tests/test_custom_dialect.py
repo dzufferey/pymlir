@@ -53,8 +53,8 @@ class DensifyOp(DialectOp):
     arg: SsaId
     type: TensorType
     pad: Optional[Union[StringLiteral, float, int, bool]] = None
-    _syntax_ = ['toy.densify {arg.ssa_id} : {type.tensor_type}',
-                'toy.densify {arg.ssa_id} , {pad.constant_literal} : {type.tensor_type}']
+    _syntax_ = ['toy.densify {arg.SSA_ID} : {type.tensor_type}',
+                'toy.densify {arg.SSA_ID} , {pad.constant_literal} : {type.tensor_type}']
 
 
 ##############################################################################

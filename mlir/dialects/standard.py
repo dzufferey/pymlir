@@ -16,10 +16,10 @@ SsaUse = Union[mast.SsaId, Literal]
 # Terminator Operations
 @dataclass
 class BrOperation(DialectOp):
-    block_id: mast.BlockId
+    block: mast.BlockId
     args: Optional[List[Tuple[mast.SsaId, mast.Type]]] = None
-    _syntax_ = ['br {block.block_id}',
-                'br {block.block_id} {args.block_arg_list}']
+    _syntax_ = ['br {block.BLOCK_ID}',
+                'br {block.BLOCK_ID} {args.block_arg_list}']
 
 
 @dataclass
@@ -27,7 +27,7 @@ class CondBrOperation(DialectOp):
     cond: SsaUse
     block_true: mast.BlockId
     block_false: mast.BlockId
-    _syntax_ = ['cond_br {cond.ssa_use} , {block_true.block_id} , {block_false.block_id}']
+    _syntax_ = ['cond_br {cond.ssa_use} , {block_true.BLOCK_ID} , {block_false.BLOCK_ID}']
 
 
 # Core Operations
@@ -36,7 +36,7 @@ class DimOperation(DialectOp):
     operand: mast.SsaId
     index: mast.SsaId
     type: mast.Type
-    _syntax_ = 'dim {operand.ssa_id} , {index.ssa_id} : {type.type}'
+    _syntax_ = 'dim {operand.SSA_ID} , {index.SSA_ID} : {type.type}'
 
 
 # Memory Operations
@@ -51,7 +51,7 @@ class AllocOperation(DialectOp):
 class AllocStaticOperation(DialectOp):
     base: int
     type: mast.MemRefType
-    _syntax_ = 'alloc_static ( {base.integer_literal} ) : {type.memref_type}'
+    _syntax_ = 'alloc_static ( {base.INT} ) : {type.memref_type}'
 
 
 @dataclass
@@ -134,30 +134,30 @@ class TensorStoreOperation(DialectOp):
     _syntax_ = 'tensor_store {src.ssa_use} , {dst.ssa_use} : {type.memref_type}'
 
 # Unary Operations
-class AbsfOperation(UnaryOperation): _opname_ = 'absf'
-class CeilfOperation(UnaryOperation): _opname_ = 'ceilf'
-class CosOperation(UnaryOperation): _opname_ = 'cos'
-class ExpOperation(UnaryOperation): _opname_ = 'exp'
-class NegfOperation(UnaryOperation): _opname_ = 'negf'
-class TanhOperation(UnaryOperation): _opname_ = 'tanh'
-class CopysignOperation(UnaryOperation): _opname_ = 'copysign'
-class SIToFPOperation(UnaryOperation): _opname_ = 'sitofp'
+class AbsfOperation(UnaryOperation): _opname_ = 'math.absf'
+class CeilfOperation(UnaryOperation): _opname_ = 'math.ceil'
+class CosOperation(UnaryOperation): _opname_ = 'math.cos'
+class ExpOperation(UnaryOperation): _opname_ = 'math.exp'
+class NegfOperation(UnaryOperation): _opname_ = 'arith.negf'
+class TanhOperation(UnaryOperation): _opname_ = 'math.tanh'
+class CopysignOperation(UnaryOperation): _opname_ = 'math.copysign'
+class SIToFPOperation(UnaryOperation): _opname_ = 'arith.sitofp'
 
 # Arithmetic Operations
-class AddiOperation(BinaryOperation): _opname_ = 'addi'
-class AddfOperation(BinaryOperation): _opname_ = 'addf'
-class AndOperation(BinaryOperation): _opname_ = 'and'
-class DivisOperation(BinaryOperation): _opname_ = 'divis'
-class DiviuOperation(BinaryOperation): _opname_ = 'diviu'
-class RemisOperation(BinaryOperation): _opname_ = 'remis'
-class RemiuOperation(BinaryOperation): _opname_ = 'remiu'
-class DivfOperation(BinaryOperation): _opname_ = 'divf'
-class MulfOperation(BinaryOperation): _opname_ = 'mulf'
-class MulIOperation(BinaryOperation): _opname_ = 'muli'
-class SubiOperation(BinaryOperation): _opname_ = 'subi'
-class SubfOperation(BinaryOperation): _opname_ = 'subf'
-class OrOperation(BinaryOperation): _opname_ = 'or'
-class XorOperation(BinaryOperation): _opname_ = 'xor'
+class AddiOperation(BinaryOperation): _opname_ = 'arith.addi'
+class AddfOperation(BinaryOperation): _opname_ = 'arith.addf'
+class AndOperation(BinaryOperation): _opname_ = 'arith.andi'
+class DivisOperation(BinaryOperation): _opname_ = 'arith.divsi'
+class DiviuOperation(BinaryOperation): _opname_ = 'arith.divui'
+class RemisOperation(BinaryOperation): _opname_ = 'arith.remsi'
+class RemiuOperation(BinaryOperation): _opname_ = 'arith.remui'
+class DivfOperation(BinaryOperation): _opname_ = 'arith.divf'
+class MulfOperation(BinaryOperation): _opname_ = 'arith.mulf'
+class MulIOperation(BinaryOperation): _opname_ = 'arith.muli'
+class SubiOperation(BinaryOperation): _opname_ = 'arith.subi'
+class SubfOperation(BinaryOperation): _opname_ = 'arith.subf'
+class OrOperation(BinaryOperation): _opname_ = 'arith.ori'
+class XorOperation(BinaryOperation): _opname_ = 'arith.xori'
 
 
 @dataclass
@@ -166,7 +166,7 @@ class CmpiOperation(DialectOp):
     operand_a: mast.SsaId
     operand_b: mast.SsaId
     type: mast.Type
-    _syntax_ = 'cmpi {comptype.string_literal} , {operand_a.ssa_id} , {operand_b.ssa_id} : {type.type}'
+    _syntax_ = 'cmpi {comptype.STRING} , {operand_a.SSA_ID} , {operand_b.SSA_ID} : {type.type}'
 
 
 @dataclass
@@ -175,7 +175,7 @@ class CmpfOperation(DialectOp):
     operand_a: mast.SsaId
     operand_b: mast.SsaId
     type: mast.Type
-    _syntax_ = 'cmpf {comptype.string_literal} , {operand_a.ssa_id} , {operand_b.ssa_id} : {type.type}'
+    _syntax_ = 'cmpf {comptype.STRING} , {operand_a.SSA_ID} , {operand_b.SSA_ID} : {type.type}'
 
 
 @dataclass

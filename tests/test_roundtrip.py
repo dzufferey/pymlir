@@ -74,7 +74,7 @@ def test_loop_dialect_roundtrip():
     scf.for %i0 = %c0 to %b0 step %c1 {
       %B_elem = load %B [ %i0 ] : memref<?xf32>
       %C_elem = load %C [ %i0 ] : memref<?xf32>
-      %sum_elem = addf %B_elem , %C_elem : f32
+      %sum_elem = arith.addf %B_elem , %C_elem : f32
       store %sum_elem , %result [ %i0 ] : memref<?xf32>
     }
     return

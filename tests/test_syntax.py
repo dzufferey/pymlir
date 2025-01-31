@@ -46,7 +46,7 @@ def test_trailing_loc(parser: Optional[Parser] = None):
     code = '''
     module {
       func.func @myfunc() {
-        %c:2 = addf %a, %b : f32 loc("test_syntax.py":36:59)
+        %c:2 = arith.addf %a, %b : f32 loc("test_syntax.py":36:59)
       }
     } loc("hi.mlir":30:1)
     '''
@@ -86,12 +86,12 @@ def test_functions(parser: Optional[Parser] = None):
     code = '''
     module {
       func.func @myfunc_a() {
-        %c:2 = addf %a, %b : f32
+        %c:2 = arith.addf %a, %b : f32
       }
       func.func @myfunc_b() {
-        %d:2 = addf %a, %b : f64
+        %d:2 = arith.addf %a, %b : f64
         ^e:
-        %f:2 = addf %d, %d : f64
+        %f:2 = arith.addf %d, %d : f64
       }
     }'''
     parser = parser or Parser()

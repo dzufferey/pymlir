@@ -7,53 +7,52 @@ from mlir import astnodes
 class TreeToMlir(Transformer):
     ###############################################################
     # Low-level literal syntax
-    digit = lambda self, val: int(val[0])
-    digits = lambda self, val: int(val[0])
-    hex_digit = lambda self, val: str(val[0])
-    hex_digits = lambda self, val: str(val[0])
-    letter = lambda self, val: str(val[0])
-    letters = lambda self, val: str(val[0])
-    id_punct = lambda self, val: str(val[0])
-    underscore = lambda self, val: str(val[0])
-    true = lambda self, _: True
-    false = lambda self, _: False
-    id_chars = lambda self, val: str(val[0])
+    DIGITS = int
+    HEXADECIMAL = lambda self, val: int(val[0], base=16)
+    BOOL = bool
+    @v_args(inline=True)
+    def INT(self, s: str):
+        if s.startswith("0x"):
+            return int(s, base=16)
+        else:
+            return int(s)
+    @v_args(inline=True)
+    def PN_INT(self, s: str):
+        if s.startswith("0x") or s.startswith("-0x"):
+            return int(s, base=16)
+        else:
+            return int(s)
+    FLOAT = float
     inttype_width = lambda self, val: int(val[0])
     dimension = astnodes.Dimension.from_lark
 
-    # Literals
-    @v_args(inline=True)
-    def decimal_literal(self, *digits):
-        return int(''.join(str(d) for d in digits))
 
     @v_args(inline=True)
-    def hexadecimal_literal(self, *digits):
-        return '0x' + ''.join(digits)
-
-    negated_integer_literal = lambda self, value: -value[0]
-    float_literal = lambda self, value: float(value[0])
-
-    @v_args(inline=True)
-    def string_literal(self, s):
+    def STRING(self, s):
         return astnodes.StringLiteral(s[1:-1].replace('\\"', '"'))
 
-    @v_args(inline=True)
-    def bare_id(self, *elements):
-        return ''.join(str(s) for s in elements)
-
-    @v_args(inline=True)
-    def suffix_id(self, *suffix):
-        return ''.join(str(s) for s in suffix)
+    BARE_ID = str
 
     ###############################################################
     # MLIR Identifiers
 
-    ssa_id = astnodes.SsaId.from_lark
-    symbol_ref_id = astnodes.SymbolRefId.from_lark
-    block_id = astnodes.BlockId.from_lark
+    @v_args(inline=True)
+    def SSA_ID(self, s):
+        return astnodes.SsaId.from_lark([s.value[1:]])
+    # SSA_ID = astnodes.SsaId.from_lark
+    @v_args(inline=True)
+    def SYMBOL_REF_ID(self, s):
+        return astnodes.SymbolRefId.from_lark([s.value[1:]])
+    # SYMBOL_REF_ID = astnodes.SymbolRefId.from_lark
+    @v_args(inline=True)
+    def BLOCK_ID(self, s):
+        return astnodes.BlockId.from_lark([s.value[1:]])
+    # BLOCK_ID = astnodes.BlockId.from_lark
     type_alias = astnodes.TypeAlias.from_lark
     attribute_alias = astnodes.AttrAlias.from_lark
-    map_or_set_id = astnodes.MapOrSetId.from_lark
+    @v_args()
+    def map_or_set_id(self, chars):
+        return astnodes.MapOrSetId.from_lark(["".join(c.value for c in chars)])
 
     ###############################################################
     # MLIR Types
@@ -77,7 +76,10 @@ class TreeToMlir(Transformer):
     ranked_memref_type = astnodes.RankedMemRefType.from_lark
     unranked_memref_type = astnodes.UnrankedMemRefType.from_lark
     opaque_dialect_item = astnodes.OpaqueDialectType.from_lark
-    pretty_dialect_item = astnodes.PrettyDialectType.from_lark
+    @v_args(inline=True)
+    def pretty_dialect_item(self, header, body):
+        dialect, type = header.split(".", 1)
+        return astnodes.PrettyDialectType.from_lark([dialect, type, body])
     llvm_function_type = astnodes.LlvmFunctionType.from_lark
     function_type = astnodes.FunctionType.from_lark
     strided_layout = astnodes.StridedLayout.from_lark
@@ -99,8 +101,7 @@ class TreeToMlir(Transformer):
     type_attribute = astnodes.TypeAttr.from_lark
     unit_attribute = astnodes.UnitAttr.from_lark
 
-    dependent_attribute_entry = astnodes.AttributeEntry.from_lark
-    dialect_attribute_entry = astnodes.DialectAttributeEntry.from_lark
+    attribute_entry = astnodes.AttributeEntry.from_lark
     attribute_dict = astnodes.AttributeDict
 
     ###############################################################
@@ -110,7 +111,6 @@ class TreeToMlir(Transformer):
     location = astnodes.FileLineColLoc.from_lark
     operation = astnodes.Operation.from_lark
     generic_operation = astnodes.GenericOperation.from_lark
-    custom_operation = astnodes.CustomOperation.from_lark
 
     ###############################################################
     # Blocks, regions, modules, functions
@@ -212,8 +212,6 @@ class TreeToMlir(Transformer):
 
     ###############################################################
     # Composite types that should be reduced to sub-types
-    bool_literal = lambda self, value: value[0]
-    integer_literal = lambda self, value: value[0]
     constant_literal = lambda self, value: value[0]
     dimension_list = lambda self, value: value[0]
     ssa_use = lambda self, value: value[0]
@@ -232,7 +230,6 @@ class TreeToMlir(Transformer):
     standard_attribute = lambda self, value: value[0]
     attribute_value = lambda self, value: value[0]
     dialect_attribute = lambda self, value: value[0]
-    attribute_entry = lambda self, value: value[0]
     trailing_type = lambda self, value: value[0]
     trailing_location = lambda self, value: value[0]
     function_result_list_parens = lambda self, value: (value[0]

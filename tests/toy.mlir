@@ -51,7 +51,7 @@ func.func @main() {
     affine.for %arg1 = 0 to 3 {
       %3 = affine.load %1[%arg0, %arg1] : memref<3x2xf64>
       %4 = affine.load %1[%arg0, %arg1] : memref<3x2xf64>
-      %5 = mulf %3, %4 : f64
+      %5 = arith.mulf %3, %4 : f64
       affine.store %5, %0[%arg0, %arg1] : memref<3x2xf64>
     }
   }
@@ -90,7 +90,7 @@ func.func @main() {
       %2 = affine.load %1[%arg1, %arg0] : memref<2x3xf64>
 
       // Multiply and store into the output buffer.
-      %3 = mulf %2, %2 : f64
+      %3 = arith.mulf %2, %2 : f64
       affine.store %3, %0[%arg0, %arg1] : memref<3x2xf64>
     }
   }
