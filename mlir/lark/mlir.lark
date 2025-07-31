@@ -102,6 +102,7 @@ opaque_dialect_item_body : "<" opaque_dialect_item_contents ("," opaque_dialect_
                               | constant_literal
                               | type
                               | bare_id "=" constant_literal
+                              | bare_id "=" attribute_alias
                               | bare_id "=" "<" opaque_dialect_item_contents ">"
 
 // NOTE: "pymlir_dialect_types" is defined externally by pyMLIR
