@@ -39,6 +39,10 @@ class TreeToMlir(Transformer):
         return ''.join(str(s) for s in elements)
 
     @v_args(inline=True)
+    def alias_id(self, *elements):
+        return ''.join(str(s) for s in elements)
+
+    @v_args(inline=True)
     def suffix_id(self, *suffix):
         return ''.join(str(s) for s in suffix)
 
