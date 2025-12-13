@@ -27,6 +27,7 @@ tensor_literal: constant_literal | "[" "]" | "[" tensor_literal ("," tensor_lite
 
 // Identifier syntax
 bare_id : (letters | underscore) (letters | digits | underscore | id_chars)*
+alias_id : (letters | underscore) (letters | digits | underscore)*
 suffix_id : digits | ((letters | id_punct) (letters | id_punct | digits)*)
 
 // Dimensions
@@ -42,9 +43,9 @@ dimension_list : dimension_list_ranked | dimension_list_unranked
 ssa_id        : "%" suffix_id ("#" digits)?
 symbol_ref_id : "@" (suffix_id | string_literal)
 block_id      : "^" suffix_id
-type_alias     : "!" (string_literal | bare_id)
+type_alias     : "!" (string_literal | alias_id)
 map_or_set_id : "#" suffix_id
-attribute_alias : "#" (string_literal | bare_id)
+attribute_alias : "#" (string_literal | alias_id)
 
 ssa_id_list : ssa_id ("," ssa_id)*
 
