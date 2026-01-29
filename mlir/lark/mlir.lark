@@ -12,6 +12,8 @@ false      : "false"
 
 id_chars: /[$.]/
 
+_NL.2: /(\r?\n)+/
+
 bool_literal : true | false
 decimal_literal : digits
 hexadecimal_literal : "0x" hex_digits
@@ -43,9 +45,9 @@ dimension_list : dimension_list_ranked | dimension_list_unranked
 ssa_id        : "%" suffix_id ("#" digits)?
 symbol_ref_id : "@" (suffix_id | string_literal)
 block_id      : "^" suffix_id
-type_alias     : "!" alias_id
+type_alias     : "!" (string_literal | alias_id) _NL?
 map_or_set_id : "#" suffix_id
-attribute_alias : "#" (string_literal | alias_id)
+attribute_alias : "#" (string_literal | alias_id) _NL?
 
 ssa_id_list : ssa_id ("," ssa_id)*
 
@@ -349,4 +351,3 @@ mlir_file: definition_and_function_list*       -> only_functions_and_definitions
 
 COMMENT : "//" /(.)*/ NEWLINE
 %ignore COMMENT
-
