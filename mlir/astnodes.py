@@ -1,6 +1,7 @@
 """ Classes containing MLIR AST node types, fields, and conversion back to
     MLIR. """
 
+from __future__ import annotations
 from enum import Enum
 from typing import Any, List, Union, Optional
 from lark import Token
@@ -272,19 +273,27 @@ class TensorType(Type):
 class RankedTensorType(TensorType):
     dimensions: List[Dimension]
     element_type: Union[IntegerType, FloatType, ComplexType, VectorType]
+    attribute: Optional[Attribute] = None
 
     def dump(self, indent: int = 0) -> str:
-        return 'tensor<%s>' % ('x'.join(
+        dims_str = 'x'.join('x'.join(
             t.dump(indent)
             for t in self.dimensions) + 'x' + self.element_type.dump(indent))
+        if self.attribute:
+            dims_str += ', ' + self.attribute.dump(indent)
+        return 'tensor<%s>' % (dims_str)
 
 
 @dataclass
 class UnrankedTensorType(TensorType):
     element_type: Union[IntegerType, FloatType, ComplexType, VectorType]
+    attribute: Optional[Attribute] = None
 
     def dump(self, indent: int = 0) -> str:
-        return 'tensor<*x%s>' % self.element_type.dump(indent)
+        dims_str = '*x%s' % self.element_type.dump(indent)
+        if self.attribute:
+            dims_str += ', ' + self.attribute.dump(indent)
+        return 'tensor<%s>' % (dims_str)
 
 
 class MemRefType(Type):
